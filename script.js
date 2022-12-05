@@ -1,77 +1,82 @@
+let cPoints=0;
+let pPoints=0;
+
+const buttons = document.querySelectorAll('.btn')
+buttons.forEach(button => {
+    button.addEventListener('click',function(){
+        roundStart(button.id)
+    })
+})
+
+
 function getComputerChoice() {
     let choice = Math.floor(Math.random() * 3 + 1);
     switch (choice){
         case 1:
-            return 'Rock'
+            return 'rock'
             break;
         case 2:
-            return 'Paper'
+            return 'paper'
             break;
         default:
-            return 'Scissors'
+            return 'scissors'
     }
 }
 
-function roundStart(playerChoice,computerChoice){
-    const plChoice = playerChoice.toLowerCase();
-    const compChoice = computerChoice.toLowerCase();
-    if (plChoice===compChoice){
-        return 'Draw! ' + plChoice + ' ties ' + compChoice;
+function roundStart(playerChoice){
+    const compChoice = getComputerChoice();
+    if (playerChoice===compChoice){
+        document.getElementById("roundResults").innerHTML  = 'Draw! ' + playerChoice + ' ties ' + compChoice;
     }
-    if (plChoice==='rock'){
+    else if(playerChoice==='rock'){
         if (compChoice==='paper'){
-            return 'Lose! Rock loses to Paper'
+            cPoints++
+            document.getElementById("roundResults").innerHTML = 'Lose! Rock loses to Paper'
+            document.getElementById("computerPoints").innerHTML = "Computer Points: " + cPoints  
         }
         else{
-            return 'Win! Rock beats Scissors'
+            pPoints++
+            document.getElementById("roundResults").innerHTML  = 'Win! Rock beats Scissors'
+            document.getElementById("playerPoints").innerHTML = "Player Points: " + pPoints
         }
     }
-    else if (plChoice==='paper'){
+    else if (playerChoice==='paper'){
         if (compChoice==='rock'){
-            return 'Win! Paper beats Rock'
+            pPoints++
+            document.getElementById("roundResults").innerHTML  = 'Win! Paper beats Rock'
+            document.getElementById("playerPoints").innerHTML = "Player Points: " + pPoints
         }
         else{
-            return 'Lose! Paper loses to Scissors'
+            cPoints++
+            document.getElementById("roundResults").innerHTML  = 'Lose! Paper loses to Scissors'
+            document.getElementById("computerPoints").innerHTML = "Computer Points: " + cPoints 
         }
     }
     else{
         if(compChoice==='rock'){
-            return 'Lose! Scissors loses to Rock'
+            cPoints++
+            document.getElementById("roundResults").innerHTML = 'Lose! Scissors loses to Rock'
+            document.getElementById("computerPoints").innerHTML = "Computer Points: " + cPoints 
         }
         else{
-            return 'Win! Scissors beats Paper'
+            pPoints++
+            document.getElementById("roundResults").innerHTML  = 'Win! Scissors beats Paper'
+            document.getElementById("playerPoints").innerHTML = "Player Points: " + pPoints 
+        }
+    }
+    if (cPoints==5 || pPoints==5 ){
+        disableButtons();
+        if (cPoints==5){
+            document.getElementById("lastResults").innerHTML = "You Lost the game. Reload to try again!"
+        }
+        else{
+            document.getElementById("lastResults").innerHTML = "You Won the game! Reload if you want to play again."
         }
     }
 }
 
-function game(){
-    let playerCount=0;
-    let computerCount=0;
-    for (let i=1; i<=5; i++){
-        const playerChoice = prompt('Please enter Rock Paper Or Scissors :')
-        const computerChoice = getComputerChoice();
-        const result = roundStart(playerChoice,computerChoice);
-        if (result.charAt(0)==='W'){
-            playerCount++;
-            console.log('You won the round ' + i);
-        }
-        else if(result.charAt(0)==='L'){
-            computerCount++;
-            console.log('You lost the round ' + i);
-        }
-        else{
-            console.log('Draw at round ' + i);
-        }
-    }
-    if (playerCount>computerCount){
-        return 'You won! Player Score:' + playerCount + ' Computer Score:' + computerCount;
-    }
-    else if (playerCount<computerCount){
-        return 'You lost. Player Score:' + playerCount + ' Computer Score:' + computerCount;
-    }
-    else{
-        return 'Draw! Player Score:' + playerCount + ' Computer Score:' + computerCount;
-    }
+function disableButtons() {
+    buttons.forEach(elem => {
+        elem.disabled = true
+    })
 }
-
-console.log(game());
